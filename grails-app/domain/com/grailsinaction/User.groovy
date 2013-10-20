@@ -8,5 +8,8 @@ class User {
     Date dateCreated
 
     static constraints = {
+        userId(size:3..20, unique: false)
+        password(size: 6..20, validator: { passwd, user -> return passwd != user.userId})
+        homepage(url: true, nullable: true)
     }
 }
