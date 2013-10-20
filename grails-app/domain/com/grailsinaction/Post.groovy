@@ -11,4 +11,8 @@ class Post {
     
     static belongsTo = [user : User]  //bi-directional link
     
+    static mapping = {
+        sort dateCreated:"desc"
+    }
+    
 }
