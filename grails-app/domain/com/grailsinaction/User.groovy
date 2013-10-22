@@ -1,7 +1,5 @@
 package com.grailsinaction
 
-import com.grailsinaction.Profile
-
 class User {
     
     String userId
@@ -9,7 +7,7 @@ class User {
     String homepage
     Date dateCreated
     Profile profile //1:1 relationship
-    static hasMany = [ posts : Post ]
+    static hasMany = [ posts : Post , tags : Tag ] //one to many relationship
     
 
     static constraints = {
