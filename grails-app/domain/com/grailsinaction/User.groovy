@@ -7,7 +7,7 @@ class User {
     String homepage
     Date dateCreated
     Profile profile //1:1 relationship
-    static hasMany = [ posts : Post , tags : Tag ] //one to many relationship
+    static hasMany = [ posts : Post , tags : Tag , following : User ] //one to many relationship
     
 
     static constraints = {

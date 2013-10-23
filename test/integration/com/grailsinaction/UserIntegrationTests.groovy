@@ -1,25 +1,29 @@
 package com.grailsinaction
 
+import org.codehaus.groovy.grails.orm.hibernate.HibernateSession
+
+import static com.grailsinaction.User.*
 import static org.junit.Assert.*
 import org.junit.*
 import grails.test.*
 import com.grailsinaction.User
 
 class UserIntegrationTests {
+
     
     void testSaveAndUpdate() {
         def user = new User(userId: 'Joelman', password: 'secrets', homepage:'https://www.google.com')
         assertNotNull user.save()
         
-        def foundUser = User.get(user.id)
+        def foundUser = get(user.id)
         foundUser.password = 'sesameseed'
         foundUser.save()
         
-        def editedUser = User.get(user.id)
+        def editedUser = get(user.id)
         assertEquals 'sesameseed', editedUser.password
         editedUser.delete()
-        assertFalse User.exists(editedUser.id)
-        assertFalse User.exists(foundUser.id)
+        assertFalse exists(editedUser.id)
+        assertFalse exists(foundUser.id)
     }   
     
     void testSaveFirstUser() {
@@ -27,10 +31,10 @@ class UserIntegrationTests {
         assertNotNull user3.save()
         assertNotNull user3.id
         
-        def foundUser = User.get(user3.id)
+        def foundUser = get(user3.id)
         assertEquals 'Joellman', foundUser.userId      
         foundUser.delete()
-        assertFalse User.exists(foundUser.id)
+        assertFalse exists(foundUser.id)
     }
   
     
@@ -38,10 +42,10 @@ class UserIntegrationTests {
         def user3 = new User(userId: 'Joelman', password: 'migsIsHott', homepage:'https://www.google.com')
         assertNotNull user3.save()
         
-        def foundUser = User.get(user3.id)
+        def foundUser = get(user3.id)
         foundUser.delete()
         
-        assertFalse User.exists(foundUser.id)
+        assertFalse exists(foundUser.id)
     } 
     
     void testBadSave() {
@@ -62,6 +66,7 @@ class UserIntegrationTests {
     
     void testBadSaveCorrected() {
         def user = new User(userId:'chuck norris', password: 'tiny', homepage: 'bad_url')
+
         assertFalse(user.validate())
         assertTrue(user.hasErrors())
         assertNull(user.save())
@@ -71,8 +76,23 @@ class UserIntegrationTests {
         assertTrue(user.validate())
         assertFalse(user.hasErrors())
         assertNotNull user.save()
-
-        
+        assert 1, User.list().size()
     }
+
+    void testForFollowing() {
+
+        def glen = new User (userId:'glenDude', password: 'cvdsiuhfg843')
+
+        def steve = new User (userId:'stevenDude', password: 'fvf082243')
+
+        def harry = new User (userId:'harryThePerson', password: '234iudwsdg')
+
+        harry.addToFollowing(steve)
+
+        assertEquals 1, harry.following.size()
+
+
+    }
+
     
 }
