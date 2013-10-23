@@ -36,4 +36,29 @@ class PostIntegrationTests {
        user.delete()
        
     }
+    
+    void testPostWithTags() {
+        
+        def user = new User(userId: 'HenryTheThird', password:'r32r2rbhb').save()
+        
+        def tagGroovy = new Tag(name: 'Groovy')
+        def tagGrails = new Tag(name: 'Grails')
+        user.addToTags(tagGroovy)
+        user.addToTags(tagGrails)
+        
+        def tagNames = user.tags*.name
+        assertEquals(['Grails','Groovy'] , tagNames.sort())
+        
+        def groovyPost = new Post(content:'A groovy post')
+        user.addToPosts(groovyPost)
+        groovyPost.addToTags(tagGroovy)
+        assertEquals 1, groovyPost.tags.size()
+
+        def bothPost = new Post(content: 'A groovy and grails post')
+        user.addToPosts(bothPost)
+        bothPost.addToTags(tagGrails)
+        bothPost.addToTags(tagGroovy)
+        assertEquals 2, bothPost.tags.size()
+        user.delete()
+    }
 }

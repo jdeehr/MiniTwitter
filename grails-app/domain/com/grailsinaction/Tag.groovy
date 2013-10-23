@@ -10,5 +10,6 @@ class Tag {
     }
     
     static hasMany = [ posts : Post ]
-    static belongsTo = [ user : User ] // the belongsTo closure says that tags can only be added from the User side, and not the opposite. 
+    static belongsTo = [ User, Post ] // the belongsTo closure says that tags can only be added from the User and Post side, and not the opposite. 
+    //IE you could call Post.addToTags() or User.addToTags(), but not Tag.addToPost()
 }
