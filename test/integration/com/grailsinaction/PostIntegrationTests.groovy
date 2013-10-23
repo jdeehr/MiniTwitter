@@ -59,6 +59,15 @@ class PostIntegrationTests {
         bothPost.addToTags(tagGrails)
         bothPost.addToTags(tagGroovy)
         assertEquals 2, bothPost.tags.size()
-        user.delete()
+
+        def foundUser = User.get(user.id)
+        def postNames = user.posts.collect{ it.content }
+        assertEquals 2, postNames.size()
+
+        foundUser.delete()
+        assertFalse User.exists(foundUser.id)
+        def deletedUserPosts = Post.findAllByUser(foundUser)
+        assertTrue deletedUserPosts.size() == 0
+
     }
 }

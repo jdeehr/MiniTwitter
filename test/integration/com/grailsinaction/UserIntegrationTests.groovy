@@ -57,7 +57,7 @@ class UserIntegrationTests {
         assertEquals "bad_url", errors.getFieldError("homepage").rejectedValue
         
         assertNull errors.getFieldError("userId")
-        user.delete()        
+
     }
     
     void testBadSaveCorrected() {
@@ -71,7 +71,7 @@ class UserIntegrationTests {
         assertTrue(user.validate())
         assertFalse(user.hasErrors())
         assertNotNull user.save()
-        user.delete()
+
         
     }
     
