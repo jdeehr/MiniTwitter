@@ -1,10 +1,8 @@
 package com.grailsinaction
 
-import com.grailsinaction.User
-
 class Profile {
     
-    static belongsTo = User
+    static belongsTo = MiniUser
             
         byte[] photo
         
@@ -15,7 +13,10 @@ class Profile {
         String timezone
         String country
         String jabberAddress
-        
+
+    String toString() {
+        "Profile for ${fullName} (${id})"
+    }
     static constraints = {
         
         fullName(nullable: true) //We dont mind if the user passes in a full name or not.

@@ -2,14 +2,16 @@ package com.grailsinaction
 
 class Post {
     
-    String content
+    String postContent
     Date dateCreated
 
+
+
     static constraints = {
-        content(blank: false)
+        postContent(blank: false)
     }
     
-    static belongsTo = [user : User]  //bi-directional link
+    static belongsTo = [user : MiniUser]  //bi-directional link
     static hasMany = [ tags : Tag ]
     
     static mapping = {

@@ -1,18 +1,17 @@
 package com.grailsinaction
 
 import static org.junit.Assert.*
-import org.junit.*
 
 class PostIntegrationTests {
 
    void testFirstPost() {
-       def user = new User(userId: 'Marty', password: 'ItisApassword', homepage:'https://www.google.com').save()
-       
-       def post1 = new Post(content: 'First post...')
+       def user = new MiniUser(userId: 'Marty', password: 'ItisApassword', homepage:'https://www.google.com').save()
+
+       def post1 = new Post(postContent: 'First post...')
        user.addToPosts(post1)       
-       def post2 = new Post(content: 'Second post...')
+       def post2 = new Post(postContent: 'Second post...')
        user.addToPosts(post2)       
-       def post3 = new Post(content: 'Third post...')
+       def post3 = new Post(postContent: 'Third post...')
        user.addToPosts(post3)
        
        assertEquals 3, user.posts.size()
@@ -20,18 +19,18 @@ class PostIntegrationTests {
        user.delete()
        
    }
-   
+
     void testAccessingPosts() {
-       def user = new User(userId: 'Marty', password: 'ItisApassword', homepage:'https://www.google.com').save()
+       def user = new MiniUser(userId: 'Marty', password: 'ItisApassword', homepage:'https://www.google.com').save()
        
-       def post1 = new Post(content: 'First')
+       def post1 = new Post(postContent: 'First')
        user.addToPosts(post1)       
-       def post2 = new Post(content: 'Second')
+       def post2 = new Post(postContent: 'Second')
        user.addToPosts(post2)       
-       def post3 = new Post(content: 'Third')
+       def post3 = new Post(postContent: 'Third')
        user.addToPosts(post3)
        
-       def postNames = user.posts.collect{ it.content }
+       def postNames = user.posts.collect{ it.postContent }
        assertEquals (['First','Second','Third'], postNames.sort())
        user.delete()
        
@@ -39,7 +38,7 @@ class PostIntegrationTests {
     
     void testPostWithTags() {
         
-        def user = new User(userId: 'HenryTheThird', password:'r32r2rbhb').save()
+        def user = new MiniUser(userId: 'HenryTheThird', password:'r32r2rbhb').save()
         
         def tagGroovy = new Tag(name: 'Groovy')
         def tagGrails = new Tag(name: 'Grails')
@@ -49,23 +48,23 @@ class PostIntegrationTests {
         def tagNames = user.tags*.name
         assertEquals(['Grails','Groovy'] , tagNames.sort())
         
-        def groovyPost = new Post(content:'A groovy post')
+        def groovyPost = new Post(postContent:'A groovy post')
         user.addToPosts(groovyPost)
         groovyPost.addToTags(tagGroovy)
         assertEquals 1, groovyPost.tags.size()
 
-        def bothPost = new Post(content: 'A groovy and grails post')
+        def bothPost = new Post(postContent: 'A groovy and grails post')
         user.addToPosts(bothPost)
         bothPost.addToTags(tagGrails)
         bothPost.addToTags(tagGroovy)
         assertEquals 2, bothPost.tags.size()
 
-        def foundUser = User.get(user.id)
-        def postNames = user.posts.collect{ it.content }
+        def foundUser = MiniUser.get(user.id)
+        def postNames = user.posts.collect{ it.postContent }
         assertEquals 2, postNames.size()
 
         foundUser.delete()
-        assertFalse User.exists(foundUser.id)
+        assertFalse MiniUser.exists(foundUser.id)
         def deletedUserPosts = Post.findAllByUser(foundUser)
         assertTrue deletedUserPosts.size() == 0
 

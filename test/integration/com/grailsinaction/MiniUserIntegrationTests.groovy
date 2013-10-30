@@ -1,20 +1,15 @@
 package com.grailsinaction
 
-import org.codehaus.groovy.grails.orm.hibernate.HibernateSession
-
-import static com.grailsinaction.User.*
+import static MiniUser.*
 import static org.junit.Assert.*
-import org.junit.*
-import grails.test.*
-import com.grailsinaction.User
 
-class UserIntegrationTests {
+class MiniUserIntegrationTests {
 
-    
+
     void testSaveAndUpdate() {
-        def user = new User(userId: 'Joelman', password: 'secrets', homepage:'https://www.google.com')
+        def user = new MiniUser(userId: 'Joelman', password: 'secrets')
         assertNotNull user.save()
-        
+
         def foundUser = get(user.id)
         foundUser.password = 'sesameseed'
         foundUser.save()
@@ -25,9 +20,9 @@ class UserIntegrationTests {
         assertFalse exists(editedUser.id)
         assertFalse exists(foundUser.id)
     }   
-    
+
     void testSaveFirstUser() {
-        def user3 = new User(userId: 'Joellman', password: 'secrets', homepage:'https://www.google.com')
+        def user3 = new MiniUser(userId: 'Joellman', password: 'Joellmangft4t')
         assertNotNull user3.save()
         assertNotNull user3.id
         
@@ -39,7 +34,7 @@ class UserIntegrationTests {
   
     
     void testSaveThenDelete() {
-        def user3 = new User(userId: 'Joelman', password: 'migsIsHott', homepage:'https://www.google.com')
+        def user3 = new MiniUser(userId: 'Joelman', password: 'migsIsHott')
         assertNotNull user3.save()
         
         def foundUser = get(user3.id)
@@ -49,7 +44,7 @@ class UserIntegrationTests {
     } 
     
     void testBadSave() {
-        def user = new User(userId:'chuck norris', password: 'tiny', homepage: 'bad_url')
+        def user = new MiniUser(userId:'chuck norris', password: 'tiny')
         assertFalse user.validate()
         assertTrue user.hasErrors()
         
@@ -57,42 +52,39 @@ class UserIntegrationTests {
         assertEquals "size.toosmall", errors.getFieldError("password").code
         assertEquals "tiny", errors.getFieldError("password").rejectedValue
         
-        assertEquals "url.invalid", errors.getFieldError("homepage").code
-        assertEquals "bad_url", errors.getFieldError("homepage").rejectedValue
-        
-        assertNull errors.getFieldError("userId")
+
 
     }
     
     void testBadSaveCorrected() {
-        def user = new User(userId:'chuck norris', password: 'tiny', homepage: 'bad_url')
+        def user = new MiniUser(userId:'chuck norris', password: 'tiny')
 
         assertFalse(user.validate())
         assertTrue(user.hasErrors())
         assertNull(user.save())
         
         user.password = "theironfist"
-        user.homepage = "https://www.google.com"
+
         assertTrue(user.validate())
         assertFalse(user.hasErrors())
         assertNotNull user.save()
-        assert 1, User.list().size()
+        assert 1, MiniUser.list().size()
     }
 
     void testForFollowing() {
 
-        def glen = new User (userId:'glenDude', password: 'cvdsiuhfg843')
+        def glen = new MiniUser (userId:'glenDude', password: 'cvdsiuhfg843')
 
-        def steve = new User (userId:'stevenDude', password: 'fvf082243')
+        def steve = new MiniUser (userId:'stevenDude', password: 'fvf082243')
 
-        def harry = new User (userId:'harryThePerson', password: '234iudwsdg')
+        def harry = new MiniUser (userId:'harryThePerson', password: '234iudwsdg')
 
         harry.addToFollowing(steve)
 
         assertEquals 1, harry.following.size()
 
-
     }
+
 
     
 }
